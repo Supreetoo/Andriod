@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "496348151238",
+    "project_id": "schoolkhoj-2f548",
+    "storage_bucket": "schoolkhoj-2f548.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496348151238:android:8f29f83310b67159c886c7",
+        "android_client_info": {
+          "package_name": "com.example.schoolkhoj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4zTGXmX601-UsLMzgbwtv1BsFG-9L9ZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
