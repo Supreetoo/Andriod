@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.schoolkhoj"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.schoolkhoj"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 35
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -48,6 +48,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    dependenciesInfo {
+        includeInApk = true
+        includeInBundle = true
+    }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {
