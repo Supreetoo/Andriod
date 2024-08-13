@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SchoolKhoj</string>
+    <string name="ADMIN_EMAIL">admin@schoolkhoj.com</string>
 </resources>
