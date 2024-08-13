@@ -4,5 +4,6 @@ enum class Navigation(val nav: String) {
     LOGIN("login"),
     SIGNUP("signup"),
     HOMEPAGE("homepage"),
-    ADMIN("admin")
+    ADMIN("admin"),
+    SCHOOL_ADD("school_add")
 }
