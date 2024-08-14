@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.schoolkhoj.AuthViewModel
 import kotlinx.coroutines.launch
 
 sealed class DetailNavItem(val route: String, val title: String) {
@@ -26,7 +28,11 @@ sealed class DetailNavItem(val route: String, val title: String) {
 
 @OptIn(ExperimentalMaterial3Api::class) // Handle potential experimental API warnings
 @Composable
-fun DetailPage(navController: NavHostController, school: School) {
+fun DetailPage(modifier: Modifier = Modifier,
+               navController: NavController,
+               authViewModel: AuthViewModel,
+               school: School
+) {
     val items = listOf(DetailNavItem.Images, DetailNavItem.Faculty, DetailNavItem.FeeStructure)
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentScreen = currentBackStackEntry.value?.destination?.route ?: DetailNavItem.Images.route
