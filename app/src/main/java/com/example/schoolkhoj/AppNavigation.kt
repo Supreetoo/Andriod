@@ -2,18 +2,25 @@ package com.example.schoolkhoj
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.schoolkhoj.pages.AddSchool
 import com.example.schoolkhoj.pages.AdminPanel
+import com.example.schoolkhoj.pages.DetailNavItem
 import com.example.schoolkhoj.pages.DetailPage
+import com.example.schoolkhoj.pages.FacultyContent
+import com.example.schoolkhoj.pages.FeeStructureContent
 import com.example.schoolkhoj.pages.LoginPage
 import com.example.schoolkhoj.pages.SignupPage
 import com.example.schoolkhoj.pages.HomePage
+import com.example.schoolkhoj.pages.ImageContent
 import com.example.schoolkhoj.util.type.Navigation
 
 import com.example.schoolkhoj.pages.School
+import com.google.gson.Gson
 import java.nio.charset.StandardCharsets
 
 @Composable
@@ -40,22 +47,20 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
         composable(Navigation.SCHOOL_ADD.nav) {
             AddSchool(modifier = modifier, navController = navController, authViewModel = authViewModel)
         }
-        composable("detail/{schoolName}/{boardType}/{coEdStatus}/{grade}/{imageRes}") { backStackEntry ->
-            val schoolName = backStackEntry.arguments?.getString("schoolName") ?: ""
-            val boardType = backStackEntry.arguments?.getString("boardType") ?: ""
-            val coEdStatus = backStackEntry.arguments?.getString("coEdStatus") ?: ""
-            val grade = backStackEntry.arguments?.getString("grade") ?: ""
-            val imageResString = backStackEntry.arguments?.getString("imageRes") ?: ""
-            val imageRes = imageResString.toIntOrNull() ?: R.drawable.north_point // Default image resource
-
-            val school = School(
-                imageRes = imageRes,
-                schoolName = decodeValue(schoolName),
-                boardType = decodeValue(boardType),
-                coEdStatus = decodeValue(coEdStatus),
-                grade = decodeValue(grade)
+        composable("detail?school={school}",
+            arguments = listOf(
+                navArgument(
+                    name = "school"
+                ) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
             )
-            DetailPage(navController = navController, school = school)
+        )
+         {
+             val schoolJson = it.arguments?.getString("school")
+             val school = Gson().fromJson(schoolJson, School::class.java)
+            DetailPage(navController = navController, authViewModel = authViewModel, school = school)
         }
     }
 }

@@ -78,4 +78,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("com.google.code.gson:gson:2.11.0")
+
 }

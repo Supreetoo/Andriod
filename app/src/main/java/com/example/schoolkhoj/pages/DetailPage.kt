@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.schoolkhoj.AuthViewModel
+import com.example.schoolkhoj.util.type.Navigation
 import kotlinx.coroutines.launch
 
 sealed class DetailNavItem(val route: String, val title: String) {
@@ -29,7 +30,7 @@ sealed class DetailNavItem(val route: String, val title: String) {
 @OptIn(ExperimentalMaterial3Api::class) // Handle potential experimental API warnings
 @Composable
 fun DetailPage(modifier: Modifier = Modifier,
-               navController: NavController,
+               navController: NavHostController,
                authViewModel: AuthViewModel,
                school: School
 ) {
@@ -47,7 +48,7 @@ fun DetailPage(modifier: Modifier = Modifier,
                         TextButton(onClick = {
                             scope.launch {
                                 try {
-                                    navController.navigate(item.route)
+                                    navController.navigate(Navigation.SCHOOL_ADD.nav)
                                 } catch (e:Exception) {
                                 e.printStackTrace()
                             }
@@ -65,17 +66,6 @@ fun DetailPage(modifier: Modifier = Modifier,
         },
         content = { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                NavHost(navController = navController, startDestination = DetailNavItem.Images.route) {
-                    composable(DetailNavItem.Images.route) {
-                        ImageContent(school)
-                    }
-                    composable(DetailNavItem.Faculty.route) {
-                        FacultyContent(school)
-                    }
-                    composable(DetailNavItem.FeeStructure.route) {
-                        FeeStructureContent(school)
-                    }
-                }
             }
         }
     )
