@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.schoolkhoj.pages.AddSchool
 import com.example.schoolkhoj.pages.AdminPanel
 import com.example.schoolkhoj.pages.LoginPage
 import com.example.schoolkhoj.pages.SignupPage
@@ -28,6 +29,9 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
         }
         composable(Navigation.ADMIN.nav) {
             AdminPanel(modifier, navController, authViewModel)
+        }
+        composable(Navigation.SCHOOL_ADD.nav) {
+            AddSchool(modifier = modifier, navController = navController, authViewModel = authViewModel)
         }
     }
 }
