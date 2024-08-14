@@ -1,5 +1,10 @@
 package com.example.schoolkhoj.pages
 
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,15 +36,25 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.schoolkhoj.AuthState
 import com.example.schoolkhoj.AuthViewModel
 import com.example.schoolkhoj.util.type.Navigation
+import com.example.schoolkhoj.util.type.Upload
 
 @Composable
 fun AdminPanel(modifier: Modifier,
                navController: NavController,
                authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
+    var uri: Uri? by remember { mutableStateOf<Uri?>(null) }
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            uri = it
+        }
+    )
+    val context = LocalContext.current
 
     val textStyle = TextStyle(
         fontSize = 14.sp,
@@ -70,6 +86,28 @@ fun AdminPanel(modifier: Modifier,
                 Text(
                     text = "Add a school",
                     style = textStyle)
+            }
+            Button(onClick = {
+                singlePhotoPicker.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            ) } ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Plus")
+                Text(
+                    text = "Upload Photo",
+                    style = textStyle)
+            }
+            AsyncImage(model = uri, contentDescription = null, modifier = Modifier.size(248.dp))
+
+            uri?.let {
+                Button(onClick = {
+                    uri?.let {
+                    Upload.uploadToGoogleStorage(uri=it, context=context)
+                        Log.i("Hello", "AdminPanel: ")
+                    }
+
+                }) {
+                    Text("Upload")
+                }
             }
         }
     }
