@@ -1,5 +1,8 @@
 package com.example.schoolkhoj.pages
 
+import android.content.res.Resources
+import android.provider.Settings.Global.getString
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -13,21 +16,32 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.schoolkhoj.AuthState
 import com.example.schoolkhoj.AuthViewModel
+import com.example.schoolkhoj.R
+import com.example.schoolkhoj.util.type.Navigation
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
-    var email by remember { mutableStateOf("") }
+    var email: String by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isLoggedIn by remember { mutableStateOf(false) }
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
-
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Authenticated ->  isLoggedIn = true
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Unit
         }
+    }
+    LaunchedEffect(isLoggedIn) {
+        Log.i("Email", Firebase.auth.currentUser?.email.toString())
+        if (isLoggedIn && "admin@schoolkhoj.com" == Firebase.auth.currentUser?.email.toString())
+            navController.navigate(Navigation.ADMIN.nav)
+        else if (isLoggedIn)
+            navController.navigate(Navigation.HOMEPAGE.nav)
     }
     Column(
         modifier = modifier.fillMaxSize(),

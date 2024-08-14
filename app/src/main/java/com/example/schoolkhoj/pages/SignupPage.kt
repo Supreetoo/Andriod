@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.schoolkhoj.AuthState
 import com.example.schoolkhoj.AuthViewModel
+import com.example.schoolkhoj.util.type.Navigation
 
 @Composable
 fun SignupPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
@@ -23,7 +24,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Authenticated -> navController.navigate(Navigation.HOMEPAGE.nav)
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
             else -> Unit
