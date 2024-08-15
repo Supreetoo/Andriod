@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.schoolkhoj.AuthState
 import com.example.schoolkhoj.AuthViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
@@ -41,3 +43,15 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
 }
 
 
+@Composable
+@Preview(showBackground = true)
+fun HomePagePreview() {
+    val navController = rememberNavController() // Mock NavController
+    val authViewModel = AuthViewModel() // Use a mock or real view model
+
+    HomePage(
+        modifier = Modifier.fillMaxSize(),
+        navController = navController,
+        authViewModel = authViewModel
+    )
+}
