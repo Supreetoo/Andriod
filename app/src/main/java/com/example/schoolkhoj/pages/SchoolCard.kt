@@ -1,5 +1,6 @@
 package com.example.schoolkhoj.pages
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,10 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontFamily.Companion.Serif
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.schoolkhoj.R
 import com.google.gson.Gson
 
 @Composable
@@ -45,14 +53,19 @@ fun SchoolCard(
         grade = grade
     )
     val schoolJson = Gson().toJson(school)
+    val textStyle = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Monospace
+    )
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(16.dp)
             .clickable {
                     navController.navigate("detail?school=${schoolJson}")
             }
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -71,30 +84,30 @@ fun SchoolCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    .padding(8.dp)
+                    .padding(16.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
+                    Text(
+                        text = schoolName,
+                        style = textStyle,
+                        modifier = Modifier.weight(1.5f),
+                        textAlign = TextAlign.Start
+                    )
                     Text(
                         text = boardType,
-                        color = Color.Black,
+                        color = Color.Gray,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = schoolName,
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                        modifier = Modifier.weight(1.5f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
                         text = "$coEdStatus | $grade",
-                        color = Color.Black,
+                        color = Color.Gray,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.End
@@ -103,4 +116,17 @@ fun SchoolCard(
             }
         }
     }
+}
+@Preview(showSystemUi = true,uiMode = Configuration.UI_MODE_NIGHT_YES )
+@Composable
+fun SchoolCardPreview() {
+    val navController = rememberNavController()
+    SchoolCard(
+        imageRes = R.drawable.north_point,
+        schoolName = "North Point",
+        boardType = "ICSE",
+        coEdStatus = "Co-Ed",
+        grade = "10+2",
+        navController = navController
+    )
 }
