@@ -78,11 +78,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-tooling-preview")
-<<<<<<< Updated upstream
-=======
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.google.firebase:firebase-storage-ktx:21.0.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
-
->>>>>>> Stashed changes
 }
