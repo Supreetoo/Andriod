@@ -42,7 +42,7 @@ fun DetailPage(modifier: Modifier = Modifier,
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = school.schoolName) },
+                title = { Text(text = school.schoolName.toString()) },
                 actions = {
                     items.forEach { item ->
                         TextButton(onClick = {
@@ -73,11 +73,13 @@ fun DetailPage(modifier: Modifier = Modifier,
 
 @Composable
 fun ImageContent(school: School) {
-    Image(
-        painter = painterResource(id = school.imageRes),
+    school.imageRes?.let { painterResource(id = it) }?.let {
+        Image(
+        painter = it,
         contentDescription = "${school.schoolName} Images",
         modifier = Modifier.fillMaxSize()
     )
+    }
 }
 
 @Composable

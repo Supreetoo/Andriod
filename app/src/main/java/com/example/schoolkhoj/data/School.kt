@@ -20,20 +20,21 @@ enum class Grade(val grade: String) {
 }
 
 data class School(
-    val name: String,
-    val address: String,
-    val city: String,
-    val state: String,
-    val type: String,
-    val startGrade: String,
-    val endGrade: String,
-    val faculties: List<Faculty> = mutableListOf(),
-    val feeStructure: HashMap<String, Int> = HashMap(),
-    val isHostelAvailable: Boolean = false
+    val name: String? = null,
+    val address: String? = null,
+    val city: String? = null,
+    val state: String? = null,
+    val type: String? = null,
+    val startGrade: String? = null,
+    val endGrade: String? = null,
+    val faculties: List<Faculty>? = null,
+    val feeStructure: HashMap<String, Int>? = null,
+    val isHostelAvailable: Boolean? = false,
+    val imageUri: List<String>? = null
 )
 
 data class Faculty (
-    val name: String,
-    val qualification: String,
-    val designation: String
+    val name: String? = null,
+    val qualification: String? = null,
+    val designation: String? = null
 )

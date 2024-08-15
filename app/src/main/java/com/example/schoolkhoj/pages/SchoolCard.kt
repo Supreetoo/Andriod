@@ -37,13 +37,13 @@ import com.google.gson.Gson
 
 @Composable
 fun SchoolCard(
-    imageRes: Int,
-    schoolName: String,
-    boardType: String,
-    coEdStatus: String,
-    grade: String,
-    navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageRes: Int = R.drawable.north_point,
+    schoolName: String?,
+    boardType: String?,
+    coEdStatus: String?,
+    grade: String?,
+    navController: NavController
 ) {
     val school = School(
         schoolName = schoolName,
@@ -63,7 +63,7 @@ fun SchoolCard(
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {
-                    navController.navigate("detail?school=${schoolJson}")
+//                    navController.navigate("detail?school=${schoolJson}")
             }
             .clip(RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(16.dp),
@@ -93,13 +93,13 @@ fun SchoolCard(
                 ) {
 
                     Text(
-                        text = schoolName,
+                        text = schoolName.toString(),
                         style = textStyle,
                         modifier = Modifier.weight(1.5f),
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = boardType,
+                        text = boardType.toString(),
                         color = Color.Gray,
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f),
