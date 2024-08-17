@@ -1,22 +1,22 @@
 package com.example.schoolkhoj.data
 
 enum class Grade(val grade: String) {
-    PRE_NURSERY("PRE_NURSERY"),
-    NURSERY("NURSERY"),
+    PRE_NURSERY("Pre Nursery"),
+    NURSERY("Nursery"),
     KINDERGARTEN_LOWER("LKG"),
     KINDERGARTEN_UPPER("UKG"),
-    GRADE_ONE("GRADE_ONE"),
-    GRADE_TWO("GRADE_TWO"),
-    GRADE_THREE("GRADE_THREE"),
-    GRADE_FOUR("GRADE_FOUR"),
-    GRADE_FIVE("GRADE_FIVE"),
-    GRADE_SIX("GRADE_SIX"),
-    GRADE_SEVEN("GRADE_SEVEN"),
-    GRADE_EIGHT("GRADE_EIGHT"),
-    GRADE_NINE("GRADE_NINE"),
-    GRADE_TEN("GRADE_TEN"),
-    GRADE_ELEVEN("GRADE_ELEVEN"),
-    GRADE_TWELVE("GRADE_TWELVE")
+    GRADE_ONE("I"),
+    GRADE_TWO("II"),
+    GRADE_THREE("III"),
+    GRADE_FOUR("IV"),
+    GRADE_FIVE("V"),
+    GRADE_SIX("VI"),
+    GRADE_SEVEN("VII"),
+    GRADE_EIGHT("VIII"),
+    GRADE_NINE("IX"),
+    GRADE_TEN("X"),
+    GRADE_ELEVEN("XI"),
+    GRADE_TWELVE("XII")
 }
 
 data class School(
@@ -30,7 +30,7 @@ data class School(
     val faculties: List<Faculty>? = null,
     val feeStructure: HashMap<String, Int>? = null,
     val isHostelAvailable: Boolean? = false,
-    val imageUri: List<String>? = null
+    val imageUri: List<String?>? = null
 )
 
 data class Faculty (

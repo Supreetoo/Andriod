@@ -1,41 +1,49 @@
 package com.example.schoolkhoj.pages
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.navigation.NavController
-import com.example.schoolkhoj.AuthState
-import com.example.schoolkhoj.AuthViewModel
-import com.example.schoolkhoj.R
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import com.example.schoolkhoj.data.Faculty
-import com.example.schoolkhoj.data.Grade
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.schoolkhoj.AuthState
+import com.example.schoolkhoj.AuthViewModel
 import com.example.schoolkhoj.data.School
-import com.example.schoolkhoj.util.type.SchoolType
 import com.example.schoolkhoj.viewmodel.SchoolViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
-import kotlinx.coroutines.tasks.await
-import okhttp3.internal.wait
-import java.util.UUID
 
-data class School(
-    val imageRes: Int? = null,
-    val schoolName: String? = null,
-    val boardType: String? = null,
-    val coEdStatus: String? = null,
-    val grade: String? = null
-)
+//data class School(
+//    val imageRes: Int? = null,
+//    val schoolName: String? = null,
+//    val boardType: String? = null,
+//    val coEdStatus: String? = null,
+//    val grade: String? = null
+//)
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -110,6 +118,12 @@ fun HomePage(
     ) {
         // Search Bar
         TextField(
+            shape = RoundedCornerShape(16.dp),
+            textStyle = TextStyle(
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Monospace
+            ),
             value = searchQuery.value,
             onValueChange = { searchQuery.value = it },
             placeholder = { Text(text = "Search Schools...") },

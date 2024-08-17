@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.schoolkhoj.R
+import com.example.schoolkhoj.data.School
 import com.google.gson.Gson
 
 @Composable
@@ -48,14 +49,13 @@ fun SchoolCard(
     grade: String?,
     navController: NavController
 ) {
-//    val school = School(
-//        schoolName = schoolName,
-//        imageRes = imageRes,
-//        boardType = boardType,
-//        coEdStatus = coEdStatus,
-//        grade = grade
-//    )
-//    val schoolJson = Gson().toJson(school)
+    val school = School(
+        name = schoolName,
+        imageUri = mutableListOf(imageRes),
+        type = boardType,
+        startGrade = grade
+    )
+    val schoolJson = Gson().toJson(school)
     val textStyle = TextStyle(
         fontSize = 10.sp,
         fontWeight = FontWeight.SemiBold,
@@ -66,7 +66,7 @@ fun SchoolCard(
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {
-//                    navController.navigate("detail?school=${schoolJson}")
+                    navController.navigate("detail?school=${schoolJson}")
             }
             .clip(RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(16.dp),

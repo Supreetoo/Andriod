@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.schoolkhoj.AuthViewModel
+import com.example.schoolkhoj.data.School
 import com.example.schoolkhoj.util.type.Navigation
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,7 @@ fun DetailPage(modifier: Modifier = Modifier,
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = school.schoolName.toString()) },
+                title = { Text(text = school.name.toString()) },
                 actions = {
                     items.forEach { item ->
                         TextButton(onClick = {
@@ -71,16 +72,16 @@ fun DetailPage(modifier: Modifier = Modifier,
     )
 }
 
-@Composable
-fun ImageContent(school: School) {
-    school.imageRes?.let { painterResource(id = it) }?.let {
-        Image(
-        painter = it,
-        contentDescription = "${school.schoolName} Images",
-        modifier = Modifier.fillMaxSize()
-    )
-    }
-}
+//@Composable
+//fun ImageContent(school: School) {
+//    school.imageUri?.let { painterResource(id = it) }?.let {
+//        Image(
+//        painter = it,
+//        contentDescription = "${school.schoolName} Images",
+//        modifier = Modifier.fillMaxSize()
+//    )
+//    }
+//}
 
 @Composable
 fun FacultyContent(school: School) {
@@ -122,7 +123,7 @@ fun FacultyCard(member: String) {
 @Composable
 fun FeeStructureContent(school: School) {
     Text(
-        text = "Fee Structure for ${school.schoolName}",
+        text = "Fee Structure for ${school.name}",
         modifier = Modifier.padding(16.dp),
         style = MaterialTheme.typography.bodyLarge
     )
