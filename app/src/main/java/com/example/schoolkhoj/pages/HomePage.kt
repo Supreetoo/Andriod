@@ -1,6 +1,8 @@
 package com.example.schoolkhoj.pages
 
 import android.annotation.SuppressLint
+import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -18,9 +21,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,12 +38,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.schoolkhoj.AuthState
 import com.example.schoolkhoj.AuthViewModel
+import com.example.schoolkhoj.data.Coordinates
+import com.example.schoolkhoj.data.Faculty
 import com.example.schoolkhoj.data.School
 import com.example.schoolkhoj.viewmodel.SchoolViewModel
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 //data class School(
 //    val imageRes: Int? = null,
@@ -45,7 +58,9 @@ import com.google.firebase.database.getValue
 //    val grade: String? = null
 //)
 
-@SuppressLint("MutableCollectionMutableState")
+@SuppressLint("MutableCollectionMutableState", "CoroutineCreationDuringComposition",
+    "MissingPermission"
+)
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
@@ -55,7 +70,8 @@ fun HomePage(
 ) {
     val authState = authViewModel.authState.observeAsState()
     val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
-
+    val scope = rememberCoroutineScope()
+    val locationClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     val items by viewModel.items.collectAsState()
     val listState = rememberLazyListState()
     val schools by remember { mutableStateOf(mutableListOf<School>()) }
@@ -153,6 +169,7 @@ fun HomePage(
                     feeStructure = school.feeStructure,
                     isHostelAvailable = school.isHostelAvailable,
                     coEdStatus = school.coEdStatus,
+                    location = school.location,
                     navController = navController
                 )
             }
@@ -216,12 +233,11 @@ fun HomePage(
 //                isHostelAvailable = true,
 //                imageUri = listOf("https://firebasestorage.googleapis.com/v0/b/schoolkhoj-2f548.appspot.com/o/file%2Fxaviers.jpeg?alt=media&token=94e2630f-f0bd-49c0-83fd-d24d985e1c8b")
 //            )
-//            database.child("school").child(UUID.randomUUID().toString()).setValue(npcs)
+//            val coordinates = Coordinates(26.1181, 85.3946)
+//            database.child("dd884904-f93c-4e6e-9c1e-274eb0e36538").child("location").setValue(coordinates)
 //            database.child("school").child(UUID.randomUUID().toString()).setValue(xaviers)
 //            database.child("school").child(UUID.randomUUID().toString()).setValue(sunshine)
-//        },
-//        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-//        contentColor = MaterialTheme.colorScheme.secondary
+//        }
 //    ) {
 //        Text(
 //            text = "Add",

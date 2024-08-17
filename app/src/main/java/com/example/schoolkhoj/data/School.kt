@@ -37,11 +37,16 @@ data class School(
     val feeStructure: HashMap<String, Int>? = null,
     val isHostelAvailable: Boolean? = false,
     val imageUri: List<String?>? = null,
-    val coEdStatus: String? = null
+    val coEdStatus: String? = null,
+    val location: Coordinates? = null
 )
 
 data class Faculty (
     val name: String? = null,
     val qualification: String? = null,
     val designation: String? = null
+)
+data class Coordinates (
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )
