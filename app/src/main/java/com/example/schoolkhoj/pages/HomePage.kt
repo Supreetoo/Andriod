@@ -152,6 +152,7 @@ fun HomePage(
                     faculties = school.faculties,
                     feeStructure = school.feeStructure,
                     isHostelAvailable = school.isHostelAvailable,
+                    coEdStatus = school.coEdStatus,
                     navController = navController
                 )
             }

@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.schoolkhoj.data.CoEdStatus
 import com.example.schoolkhoj.data.Faculty
 import com.example.schoolkhoj.data.School
 import com.google.gson.Gson
@@ -47,6 +52,7 @@ fun SchoolCard(
     faculties: List<Faculty>?,
     feeStructure: HashMap<String, Int>?,
     isHostelAvailable: Boolean?,
+    coEdStatus: String?,
     navController: NavController
 ) {
     val school = School(
@@ -73,7 +79,7 @@ fun SchoolCard(
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {
-                    navController.navigate("detail?school=${schoolJson}")
+                navController.navigate("detail?school=${schoolJson}")
             }
             .clip(RoundedCornerShape(32.dp)),
         shape = RoundedCornerShape(16.dp),
@@ -99,10 +105,11 @@ fun SchoolCard(
                     .background(Color.White)
                     .padding(16.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier.fillMaxWidth().height(80.dp),
+                    horizontalAlignment = Alignment.Start
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Text(
@@ -110,22 +117,37 @@ fun SchoolCard(
                         style = textStyle,
                         modifier = Modifier.weight(1.5f),
                         fontSize = 10.sp,
-                        textAlign = TextAlign.Start
                     )
-                    Text(
-                        text = type.toString(),
-                        color = Color.Gray,
-                        fontSize = 10.sp,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        text = "$endGrade",
-                        color = Color.Gray,
-                        fontSize = 10.sp,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.End
-                    )
+                    Row {
+                        Text(
+                            text = type.toString(),
+                            color = Color.Gray,
+                            fontSize = 10.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "$city, $state",
+                            color = Color.Gray,
+                            fontSize = 10.sp,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.End
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = "$startGrade - $endGrade",
+                            color = Color.Gray,
+                            fontSize = 10.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "$coEdStatus",
+                            color = Color.Gray,
+                            fontSize = 10.sp,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.End
+                        )
+                    }
                 }
             }
         }

@@ -19,6 +19,12 @@ enum class Grade(val grade: String) {
     GRADE_TWELVE("XII")
 }
 
+enum class CoEdStatus(val status: String) {
+    BOYS("Boys"),
+    GIRLS("Girls"),
+    COED("Co-Ed")
+}
+
 data class School(
     val name: String? = null,
     val address: String? = null,
@@ -30,7 +36,8 @@ data class School(
     val faculties: List<Faculty>? = null,
     val feeStructure: HashMap<String, Int>? = null,
     val isHostelAvailable: Boolean? = false,
-    val imageUri: List<String?>? = null
+    val imageUri: List<String?>? = null,
+    val coEdStatus: String? = null
 )
 
 data class Faculty (
