@@ -1,6 +1,7 @@
 package com.example.schoolkhoj.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.schoolkhoj.data.School
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
@@ -10,6 +11,7 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class SchoolViewModel : ViewModel() {
     private val databaseReference = Firebase.database.reference.child("school")
@@ -19,43 +21,65 @@ class SchoolViewModel : ViewModel() {
     private var lastItem: DataSnapshot? = null
     var hasMoreData = true
 
-    fun loadMoreItems(): List<School> {
-        if (hasMoreData) {
-            val query = if (lastItem != null) {
-                databaseReference.orderByKey().startAfter(lastItem!!.key)
-                    .limitToFirst(PAGE_SIZE + 1)
-            } else {
-                databaseReference.orderByKey().limitToFirst(PAGE_SIZE + 1)
-            }
-
-            query.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val newItems = mutableListOf<School>()
-                    if (snapshot.exists()) {
-                        lastItem = snapshot.children.lastOrNull()
-                        snapshot.children.forEach { childSnapshot ->
-                            val item = childSnapshot.getValue<School>()
-                            if (item != null) {
-                                newItems.add(item)
-                            }
-                        }
-                        if (newItems.size > PAGE_SIZE) {
-                            newItems.removeAt(PAGE_SIZE)
-                            hasMoreData = true
-                        } else {
-                            hasMoreData = false
-                        }
-                        _items.value += newItems
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    error.toException().printStackTrace()
-                }
-            })
-        }
-        return _items.value
+    init {
+        loadMoreItems()
     }
+
+    private fun loadMoreItems() {
+        viewModelScope.launch {
+            try {
+                databaseReference.get().addOnSuccessListener { snapshot ->
+                    val newItems = mutableListOf<School>()
+                    snapshot.children.forEach { childSnapshot ->
+                        val item = childSnapshot.getValue<School>()
+                        if (item != null) {
+                            newItems.add(item)
+                        }
+                    }
+                    _items.value = newItems
+                }.addOnFailureListener {
+                    // Handle errors
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+//        if (hasMoreData) {
+//            val query = if (lastItem != null) {
+//                databaseReference.orderByKey().startAfter(lastItem!!.key)
+//                    .limitToFirst(PAGE_SIZE + 1)
+//            } else {
+//                databaseReference.orderByKey().limitToFirst(PAGE_SIZE + 1)
+//            }
+//
+//            query.addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    val newItems = mutableListOf<School>()
+//                    if (snapshot.exists()) {
+//                        lastItem = snapshot.children.lastOrNull()
+//                        snapshot.children.forEach { childSnapshot ->
+//                            val item = childSnapshot.getValue<School>()
+//                            if (item != null) {
+//                                newItems.add(item)
+//                            }
+//                        }
+//                        if (newItems.size > PAGE_SIZE) {
+//                            newItems.removeAt(PAGE_SIZE)
+//                            hasMoreData = true
+//                        } else {
+//                            hasMoreData = false
+//                        }
+//                        _items.value += newItems
+//                    }
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    error.toException().printStackTrace()
+//                }
+//            })
+//        }
 
     companion object {
         private const val PAGE_SIZE = 20

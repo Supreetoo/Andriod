@@ -63,6 +63,7 @@ fun HomePage(
             else -> Unit
         }
     }
+
 //    LaunchedEffect(remember { derivedStateOf { listState.firstVisibleItemIndex } }) {
 //        val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
 //        if (lastVisibleItem != null && lastVisibleItem.index == items.size - 1) {
@@ -117,15 +118,16 @@ fun HomePage(
                 .padding(bottom = 16.dp)
         )
 
+
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(schools.filter {
+            items(items.filter {
                 it.name?.contains(searchQuery.value.text, ignoreCase = true) ?:false
             }) { school ->
                 SchoolCard(
-                    imageRes = R.drawable.north_point,
+                    imageRes = school.imageUri?.get(0),
                     schoolName = school.name,
                     boardType = school.type,
                     coEdStatus = school.endGrade,
@@ -204,4 +206,29 @@ fun HomePage(
 //            text = "Add",
 //        )
 //    }
-}
+    }
+
+//    Surface(
+//        modifier = Modifier.fillMaxSize(),
+//        color = MaterialTheme.colorScheme.background
+//    ) {
+//        LazyColumn(
+//            verticalArrangement = Arrangement.spacedBy(8.dp),
+//            modifier = Modifier.padding(16.dp)
+//        ) {
+//            items(items) { school ->
+//                RecordItem(school = school)
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun RecordItem(school: School) {
+//    Column(modifier = Modifier.padding(8.dp)) {
+//        Text(text = "Name: ${school.name}", style = MaterialTheme.typography.bodyLarge)
+//        Text(text = "Type: ${school.type}", style = MaterialTheme.typography.bodyLarge)
+//        Text(text = "Address: ${school.address}", style = MaterialTheme.typography.bodyLarge)
+//    }
+//}
+

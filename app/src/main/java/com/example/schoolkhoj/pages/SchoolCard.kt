@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -32,29 +33,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.schoolkhoj.R
 import com.google.gson.Gson
 
 @Composable
 fun SchoolCard(
     modifier: Modifier = Modifier,
-    imageRes: Int = R.drawable.north_point,
+    imageRes: String?,
     schoolName: String?,
     boardType: String?,
     coEdStatus: String?,
     grade: String?,
     navController: NavController
 ) {
-    val school = School(
-        schoolName = schoolName,
-        imageRes = imageRes,
-        boardType = boardType,
-        coEdStatus = coEdStatus,
-        grade = grade
-    )
-    val schoolJson = Gson().toJson(school)
+//    val school = School(
+//        schoolName = schoolName,
+//        imageRes = imageRes,
+//        boardType = boardType,
+//        coEdStatus = coEdStatus,
+//        grade = grade
+//    )
+//    val schoolJson = Gson().toJson(school)
     val textStyle = TextStyle(
-        fontSize = 14.sp,
+        fontSize = 10.sp,
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.Monospace
     )
@@ -71,8 +74,11 @@ fun SchoolCard(
     ) {
         Column {
             // School Image
-            Image(
-                painter = painterResource(id = imageRes),
+            AsyncImage(
+                ImageRequest.Builder(LocalContext.current)
+                    .data(imageRes)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "School Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -96,19 +102,20 @@ fun SchoolCard(
                         text = schoolName.toString(),
                         style = textStyle,
                         modifier = Modifier.weight(1.5f),
+                        fontSize = 10.sp,
                         textAlign = TextAlign.Start
                     )
                     Text(
                         text = boardType.toString(),
                         color = Color.Gray,
-                        fontSize = 16.sp,
+                        fontSize = 10.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = "$coEdStatus | $grade",
+                        text = "$grade",
                         color = Color.Gray,
-                        fontSize = 16.sp,
+                        fontSize = 10.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.End
                     )
@@ -117,16 +124,16 @@ fun SchoolCard(
         }
     }
 }
-@Preview(showSystemUi = true,uiMode = Configuration.UI_MODE_NIGHT_YES )
-@Composable
-fun SchoolCardPreview() {
-    val navController = rememberNavController()
-    SchoolCard(
-        imageRes = R.drawable.north_point,
-        schoolName = "North Point",
-        boardType = "ICSE",
-        coEdStatus = "Co-Ed",
-        grade = "10+2",
-        navController = navController
-    )
-}
+//@Preview(showSystemUi = true,uiMode = Configuration.UI_MODE_NIGHT_YES )
+//@Composable
+//fun SchoolCardPreview() {
+//    val navController = rememberNavController()
+//    SchoolCard(
+//        imageRes = R.drawable.north_point,
+//        schoolName = "North Point",
+//        boardType = "ICSE",
+//        coEdStatus = "Co-Ed",
+//        grade = "10+2",
+//        navController = navController
+//    )
+//}
