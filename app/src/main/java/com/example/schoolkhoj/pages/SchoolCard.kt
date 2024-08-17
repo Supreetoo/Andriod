@@ -1,7 +1,5 @@
 package com.example.schoolkhoj.pages
 
-import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,20 +20,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontFamily.Companion.Serif
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.schoolkhoj.R
+import com.example.schoolkhoj.data.Faculty
 import com.example.schoolkhoj.data.School
 import com.google.gson.Gson
 
@@ -44,16 +38,29 @@ fun SchoolCard(
     modifier: Modifier = Modifier,
     imageRes: String?,
     schoolName: String?,
-    boardType: String?,
-    coEdStatus: String?,
-    grade: String?,
+    address: String?,
+    city: String?,
+    state: String?,
+    type: String?,
+    startGrade: String?,
+    endGrade: String?,
+    faculties: List<Faculty>?,
+    feeStructure: HashMap<String, Int>?,
+    isHostelAvailable: Boolean?,
     navController: NavController
 ) {
     val school = School(
         name = schoolName,
-        imageUri = mutableListOf(imageRes),
-        type = boardType,
-        startGrade = grade
+        address = address,
+        city = city,
+        state = state,
+        type = type,
+        startGrade = startGrade,
+        endGrade = endGrade,
+        faculties = faculties,
+        feeStructure = feeStructure,
+        isHostelAvailable = isHostelAvailable,
+        imageUri = mutableListOf(imageRes)
     )
     val schoolJson = Gson().toJson(school)
     val textStyle = TextStyle(
@@ -106,14 +113,14 @@ fun SchoolCard(
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = boardType.toString(),
+                        text = type.toString(),
                         color = Color.Gray,
                         fontSize = 10.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = "$grade",
+                        text = "$endGrade",
                         color = Color.Gray,
                         fontSize = 10.sp,
                         modifier = Modifier.weight(1f),

@@ -143,9 +143,15 @@ fun HomePage(
                 SchoolCard(
                     imageRes = school.imageUri?.get(0),
                     schoolName = school.name,
-                    boardType = school.type,
-                    coEdStatus = school.endGrade,
-                    grade = school.startGrade,
+                    address = school.address,
+                    city = school.city,
+                    state = school.state,
+                    type = school.type,
+                    startGrade = school.startGrade,
+                    endGrade = school.endGrade,
+                    faculties = school.faculties,
+                    feeStructure = school.feeStructure,
+                    isHostelAvailable = school.isHostelAvailable,
                     navController = navController
                 )
             }
