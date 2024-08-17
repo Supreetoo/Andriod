@@ -1,6 +1,12 @@
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,6 +32,7 @@ fun AddSchool(
     val authState = authViewModel.authState.observeAsState()
 
     var name: String by remember { mutableStateOf("") }
+    var uri: Uri? by remember { mutableStateOf<Uri?>(null) }
     var address: String by remember { mutableStateOf("") }
     var city: String by remember { mutableStateOf("") }
     var state: String by remember { mutableStateOf("") }
@@ -39,6 +46,12 @@ fun AddSchool(
         fontSize = 14.sp,
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.Monospace
+    )
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            uri = it
+        }
     )
 
     LaunchedEffect(authState.value) {
@@ -133,12 +146,17 @@ fun AddSchool(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier.weight(1f).padding(8.dp)
-                ) {
-                    Text("Upload Image", style = textStyle)
+                Button(onClick = {
+                    singlePhotoPicker.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    ) },
+                    modifier = Modifier.weight(1f).padding(8.dp)) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Plus")
+                    Text("Image", style = textStyle)
+
                 }
+
+
 
                 Button(
                     onClick = { /* Handle submit action */ },
