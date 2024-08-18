@@ -1,39 +1,52 @@
 package com.example.schoolkhoj.data
 
 enum class Grade(val grade: String) {
-    PRE_NURSERY("PRE_NURSERY"),
-    NURSERY("NURSERY"),
+    PRE_NURSERY("Pre Nursery"),
+    NURSERY("Nursery"),
     KINDERGARTEN_LOWER("LKG"),
     KINDERGARTEN_UPPER("UKG"),
-    GRADE_ONE("GRADE_ONE"),
-    GRADE_TWO("GRADE_TWO"),
-    GRADE_THREE("GRADE_THREE"),
-    GRADE_FOUR("GRADE_FOUR"),
-    GRADE_FIVE("GRADE_FIVE"),
-    GRADE_SIX("GRADE_SIX"),
-    GRADE_SEVEN("GRADE_SEVEN"),
-    GRADE_EIGHT("GRADE_EIGHT"),
-    GRADE_NINE("GRADE_NINE"),
-    GRADE_TEN("GRADE_TEN"),
-    GRADE_ELEVEN("GRADE_ELEVEN"),
-    GRADE_TWELVE("GRADE_TWELVE")
+    GRADE_ONE("I"),
+    GRADE_TWO("II"),
+    GRADE_THREE("III"),
+    GRADE_FOUR("IV"),
+    GRADE_FIVE("V"),
+    GRADE_SIX("VI"),
+    GRADE_SEVEN("VII"),
+    GRADE_EIGHT("VIII"),
+    GRADE_NINE("IX"),
+    GRADE_TEN("X"),
+    GRADE_ELEVEN("XI"),
+    GRADE_TWELVE("XII")
+}
+
+enum class CoEdStatus(val status: String) {
+    BOYS("Boys"),
+    GIRLS("Girls"),
+    COED("Co-Ed")
 }
 
 data class School(
-    val name: String,
-    val address: String,
-    val city: String,
-    val state: String,
-    val type: String,
-    val startGrade: String,
-    val endGrade: String,
-    val faculties: List<Faculty> = mutableListOf(),
-    val feeStructure: HashMap<String, Int> = HashMap(),
-    val isHostelAvailable: Boolean = false
+    val name: String? = null,
+    val address: String? = null,
+    val city: String? = null,
+    val state: String? = null,
+    val type: String? = null,
+    val startGrade: String? = null,
+    val endGrade: String? = null,
+    val faculties: List<Faculty>? = null,
+    val feeStructure: HashMap<String, Int>? = null,
+    val isHostelAvailable: Boolean? = false,
+    val imageUri: List<String?>? = null,
+    val coEdStatus: String? = null,
+    val location: Coordinates? = null
 )
 
 data class Faculty (
-    val name: String,
-    val qualification: String,
-    val designation: String
+    val name: String? = null,
+    val qualification: String? = null,
+    val designation: String? = null
+)
+data class Coordinates (
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )
