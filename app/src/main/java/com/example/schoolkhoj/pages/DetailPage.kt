@@ -1,26 +1,27 @@
 package com.example.schoolkhoj.pages
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.schoolkhoj.AuthViewModel
 import com.example.schoolkhoj.data.School
-import com.example.schoolkhoj.util.type.Navigation
-import kotlinx.coroutines.launch
+import com.example.schoolkhoj.data.Faculty
+
+
 
 sealed class DetailNavItem(val route: String, val title: String) {
     object Images : DetailNavItem("images", "Images")
@@ -30,36 +31,32 @@ sealed class DetailNavItem(val route: String, val title: String) {
 
 @OptIn(ExperimentalMaterial3Api::class) // Handle potential experimental API warnings
 @Composable
-fun DetailPage(modifier: Modifier = Modifier,
-               navController: NavHostController,
-               authViewModel: AuthViewModel,
-               school: School
+fun DetailPage(
+    authViewModel: AuthViewModel,
+    navController: NavHostController,
+    school: School
 ) {
     val items = listOf(DetailNavItem.Images, DetailNavItem.Faculty, DetailNavItem.FeeStructure)
-    val currentBackStackEntry = navController.currentBackStackEntryAsState()
-    val currentScreen = currentBackStackEntry.value?.destination?.route ?: DetailNavItem.Images.route
-    val scope = rememberCoroutineScope()
+
+    val (selectedTab, setSelectedTab) = remember { mutableStateOf<DetailNavItem>(DetailNavItem.Images) }
+
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = school.name.toString()) },
-                actions = {
-                    items.forEach { item ->
-                        TextButton(onClick = {
-                            scope.launch {
-                                try {
-                                    navController.navigate(Navigation.SCHOOL_ADD.nav)
-                                } catch (e:Exception) {
-                                e.printStackTrace()
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        items.forEach { item ->
+                            TextButton(onClick = { setSelectedTab(item) }) {
+                                Text(
+                                    text = item.title,
+                                    color = if (selectedTab == item) Color.White else Color.Gray
+                                )
                             }
-
-                            }
-                        }) {
-                            Text(
-                                text = item.title,
-                                color = if (currentScreen == item.route) Color.White else Color.Gray
-                            )
                         }
                     }
                 }
@@ -67,44 +64,57 @@ fun DetailPage(modifier: Modifier = Modifier,
         },
         content = { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
+                when (selectedTab) {
+                    DetailNavItem.Images -> ImageContent(school = school)
+                    DetailNavItem.Faculty -> FacultyContent(school = school)
+                    DetailNavItem.FeeStructure -> FeeStructureContent(school = school)
+                }
             }
         }
     )
 }
 
-//@Composable
-//fun ImageContent(school: School) {
-//    school.imageUri?.let { painterResource(id = it) }?.let {
-//        Image(
-//        painter = it,
-//        contentDescription = "${school.schoolName} Images",
-//        modifier = Modifier.fillMaxSize()
-//    )
-//    }
-//}
-
 @Composable
-fun FacultyContent(school: School) {
-    val facultyMembers = listOf(
-        "Dr. John Doe - Principal",
-        "Mrs. Jane Smith - Vice Principal",
-        "Mr. Alan Brown - Science Teacher",
-        // Add more members here
-    )
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(facultyMembers) { member ->
-            FacultyCard(member)
+fun ImageContent(school: School) {
+    school.imageUri?.let { imageUris ->
+        LazyColumn {
+            items(imageUris) { uri ->
+                uri?.let {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(it)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "School Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .padding(8.dp)
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun FacultyCard(member: String) {
+fun FacultyContent(school: School) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        school.faculties?.let { facultyList ->
+            items(facultyList) { faculty ->
+                FacultyCard(faculty = faculty)
+            }
+        }
+    }
+}
+
+@Composable
+fun FacultyCard(faculty: Faculty) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,19 +122,35 @@ fun FacultyCard(member: String) {
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Text(
-            text = member,
-            modifier = Modifier.padding(16.dp),
-            style = MaterialTheme.typography.bodyMedium
-        )
+        Column(modifier = Modifier.padding(16.dp)) {
+            faculty.name?.let {
+                Text(text = it, style = MaterialTheme.typography.bodyLarge)
+            }
+            faculty.designation?.let {
+                Text(text = it, style = MaterialTheme.typography.bodyMedium)
+            }
+            faculty.qualification?.let {
+                Text(text = it, style = MaterialTheme.typography.bodySmall)
+            }
+        }
     }
 }
 
 @Composable
 fun FeeStructureContent(school: School) {
-    Text(
-        text = "Fee Structure for ${school.name}",
-        modifier = Modifier.padding(16.dp),
-        style = MaterialTheme.typography.bodyLarge
-    )
+    school.feeStructure?.let { fees ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(fees.keys.toList()) { grade ->
+                Text(
+                    text = "$grade: ${fees[grade]}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+    }
 }
