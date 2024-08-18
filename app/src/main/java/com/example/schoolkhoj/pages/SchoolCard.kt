@@ -53,13 +53,15 @@ import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 //IMPORTANT: Need to address MissingPermission suppression
 @SuppressLint("CoroutineCreationDuringComposition", "MissingPermission")
 @Composable
 fun SchoolCard(
     modifier: Modifier = Modifier,
-    imageRes: String?,
+    imageRes: List<String?>?,
     schoolName: String?,
     address: String?,
     city: String?,
@@ -106,7 +108,9 @@ fun SchoolCard(
         faculties = faculties,
         feeStructure = feeStructure,
         isHostelAvailable = isHostelAvailable,
-        imageUri = mutableListOf(imageRes)
+        imageUri = imageRes?.map { url ->
+            URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+        }
     )
     val schoolJson = Gson().toJson(school)
     val textStyle = TextStyle(
@@ -127,17 +131,19 @@ fun SchoolCard(
     ) {
         Column {
             // School Image
-            AsyncImage(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(imageRes)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "School Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-            )
+            if (imageRes != null) {
+                AsyncImage(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(imageRes.get(0))
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "School Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                )
+            }
             // Text below the image on a white background
             Box(
                 modifier = Modifier

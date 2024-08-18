@@ -69,6 +69,7 @@ fun DetailPage(
                             TextButton(onClick = { setSelectedTab(item) }) {
                                 Text(
                                     text = item.title,
+                                    style = textStyle,
                                     color = if (selectedTab == item) Color.Black else Color.Gray
                                 )
                             }
@@ -130,6 +131,11 @@ fun FacultyContent(school: School) {
 
 @Composable
 fun FacultyCard(faculty: Faculty) {
+    val textStyle = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Monospace
+    )
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,13 +168,14 @@ fun FacultyCard(faculty: Faculty) {
                 faculty.name?.let {
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                        style = textStyle.copy(fontWeight = FontWeight.Bold)
+//                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
                 }
                 faculty.qualification?.let {
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = textStyle.copy(fontWeight = FontWeight.Medium),
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -179,7 +186,7 @@ fun FacultyCard(faculty: Faculty) {
             faculty.designation?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = textStyle.copy(fontWeight = FontWeight.SemiBold),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 8.dp)
@@ -191,6 +198,11 @@ fun FacultyCard(faculty: Faculty) {
 
 @Composable
 fun FeeStructureContent(school: School) {
+    val textStyle = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Monospace
+    )
     school.feeStructure?.let { fees ->
         LazyColumn(
             modifier = Modifier
@@ -200,7 +212,8 @@ fun FeeStructureContent(school: School) {
             items(fees.keys.toList()) { grade ->
                 Text(
                     text = "$grade: ${fees[grade]}",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = textStyle,
+//                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(8.dp)
                 )
             }

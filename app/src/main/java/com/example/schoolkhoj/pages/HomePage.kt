@@ -157,7 +157,7 @@ fun HomePage(
                 it.name?.contains(searchQuery.value.text, ignoreCase = true) ?:false
             }) { school ->
                 SchoolCard(
-                    imageRes = school.imageUri?.get(0),
+                    imageRes = school.imageUri,
                     schoolName = school.name,
                     address = school.address,
                     city = school.city,
