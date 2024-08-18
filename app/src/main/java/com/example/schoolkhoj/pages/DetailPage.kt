@@ -70,12 +70,15 @@ fun DetailPage(
                                 Text(
                                     text = item.title,
                                     style = textStyle,
-                                    color = if (selectedTab == item) Color.Black else Color.Gray
+                                    color = if (selectedTab == item) Color.Black else Color.White
                                 )
                             }
                         }
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Gray
+                )
             )
         },
         content = { innerPadding ->
@@ -203,19 +206,39 @@ fun FeeStructureContent(school: School) {
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.Monospace
     )
+
     school.feeStructure?.let { fees ->
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            items(fees.keys.toList()) { grade ->
-                Text(
-                    text = "$grade: ${fees[grade]}",
-                    style = textStyle,
-//                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(8.dp)
-                )
+            // Header Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Grade", style = textStyle)
+                Text("Fee", style = textStyle)
+            }
+            Divider(color = Color.Gray, thickness = 1.dp)
+
+            // Data Rows
+            fees.keys.forEach { grade ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = grade, style = textStyle)
+                    Text(text = "${fees[grade]}", style = textStyle)
+                }
+                Divider(color = Color.Gray, thickness = 0.5.dp)
             }
         }
     }
